@@ -111,10 +111,8 @@ con 115,184 registros para el periodo de la base de datos.
 
 ## Conclusión del equipo
 
-ESTADO_CONCLUSION: Los datos muestran que el principal delito reportado es robo de vehículo.
-Esto habla de las oportunidades que existen para delinquir en dicha ciudad. Al haber una 
-amplia oferta de vehículos, se convierte en un blanco atractivo. 
+ESTADO_CONCLUSION: segundo intento 
 
 ## Reflexión sobre Git
 
-Pendiente. 
+Pendiente.
