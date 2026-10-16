@@ -111,7 +111,9 @@ con 115,184 registros para el periodo de la base de datos.
 
 ## Conclusión del equipo
 
-ESTADO_CONCLUSION: PENDIENTE
+ESTADO_CONCLUSION: El principal hallazgo del análisis fue que la mayoría de los casos son delitos de clasificación tipo 1.
+
+Integrante a: La conclusión de los distintos análisis realizados es que la mayoría de los delitos son de tipo 1, la zona con la myor cantidad de delitos tipo 1 es Central y que el principal delito de LA es Robo de vehículo.
 
 ## Reflexión sobre Git
 
