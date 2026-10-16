@@ -111,10 +111,20 @@ con 115,184 registros para el periodo de la base de datos.
 
 ## Conclusión del equipo
 
-ESTADO_CONCLUSION: El principal hallazgo del análisis fue que la mayoría de los casos son delitos de clasificación tipo 1.
+ESTADO_CONCLUSION: El análisis de ambos integrantes mostró los siguientes hallazgos: 1) la mayoría de los delitos son de tipo 1, 2) el principal delito es robo de vehículo, 3) la zona Central es la más afectada, con delitos de tipo 1.
 
-Integrante a: La conclusión de los distintos análisis realizados es que la mayoría de los delitos son de tipo 1, la zona con la myor cantidad de delitos tipo 1 es Central y que el principal delito de LA es Robo de vehículo.
+##Reflexión sobre el conflicto
+
+Generamos el conflicto correctamente pero después el error que tuvimos fue no leer con atención el mensaje del error, porque había que copiar una instrucción de ahí.
+El comando que había que copiar y pegar era git conflict pull.rebase false entonces como al inicio no lo hicimos no veíamos las líneas del error en la terminal, solo las podíamos ver en GitHub. Después intentamos generar nuevamente el mismo error pero nos hicimos bolas con las versiones de estos errores. Al final pudimos arreglarlo. La moraleja es leer mejor para la próxima. 
+
 
 ## Reflexión sobre Git
 
-Pendiente. 
+¿Por qué en la primera parte ambas personas pudieron modificar docs/reporte.md sin generar un conflicto? Porque hicimos cambios en líneas diferentes.
+¿Por qué en la segunda parte sí apareció un conflicto? Porque hicimos cambios en la misma línea.
+¿Qué información les dio git status durante la resolución? Nos ofreció una serie de comandos como git conflict pull.rebase false.
+¿Qué hicieron para resolver el conflicto? Tuvimos que copiar y ejecutar ese comando que nos sugirió el error y con eso después abrimos nano para editar el doc y borrar las líneas del error.
+¿Resolver un conflicto significa necesariamente escoger la versión de una sola persona? No, puedes hacer una mezcla. El equipo decide.
+¿Qué prácticas podrían utilizar en un proyecto real para reducir conflictos? Asignar claramente responsabilidades. Tener la seguridad de que no están haciendo lo mismo.
+¿Qué diferencia observaron entre trabajar en una rama y trabajar directamente en main? En ramas hay que tener más cuidado, por eso puedes hacer comentarios y revisar en el pull request antes de hacer el merge. 
