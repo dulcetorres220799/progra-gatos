@@ -111,7 +111,9 @@ con 115,184 registros para el periodo de la base de datos.
 
 ## Conclusión del equipo
 
-ESTADO_CONCLUSION: segundo intento 
+ESTADO_CONCLUSION: Este análisis presenta tres hallazgos centrales. Primero, la mayoría de los delitos es de tipo 1. 
+Segundo, el principal delito reportado es robo de vehículo. 
+Tercero, la zona central tiene la mayor cantidad de delitos y estos son de tipo 1. 
 
 ## Reflexión sobre Git
 
