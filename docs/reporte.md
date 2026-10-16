@@ -109,11 +109,12 @@ se obtuvo el listado de delitos ordenados de mayor a menor, según su frecuencia
 De manera que el principal delito cometido en Los Angeles corresponde a robo de vehículo,
 con 115,184 registros para el periodo de la base de datos. 
 
-## Conclusión del equipo
+## Conclusión del equipo 
 
 ESTADO_CONCLUSION: Este análisis presenta tres hallazgos centrales. Primero, la mayoría de los delitos es de tipo 1. 
 Segundo, el principal delito reportado es robo de vehículo. 
 Tercero, la zona central tiene la mayor cantidad de delitos y estos son de tipo 1. 
+
 
 ## Reflexión sobre Git
 
