@@ -6,7 +6,7 @@ index.pdf
 *.tex
 *_files
 data/** 
-yy!data/**/ 
+!data/**/ 
 !data/**/.gitkeep
 matrices/**
 trained_models/**
