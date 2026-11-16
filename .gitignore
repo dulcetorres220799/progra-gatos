@@ -5,7 +5,9 @@ _manuscript/*
 index.pdf
 *.tex
 *_files
-data/**
+data/** 
+!data/**/ 
+!data/**/.gitkeep
 matrices/**
 trained_models/**
 logs/**
