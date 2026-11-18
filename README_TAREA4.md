@@ -24,5 +24,10 @@ Este conjunto de datos refleja incidentes de delitos en la ciudad de Los Ángele
 - `vict_age`: edad de la víctima
 - `weapon_used_cd`: tipo de arma utilizada
 
-**Pregunta central del análisis:**
-Considerando el acumulado total del periodo para definir los 3 delitos más frecuentes en mujeres y en hombres, ¿cómo ha evolucionado su incidencia año con año y cuál es el tipo de arma más utilizada en cada uno?
+**Preguntas centrales del análisis:**
+Considerando el acumulado total del periodo ¿cuáles son los 3 delitos más frecuentes, según el sexo de las víctimas? 
+De estos delitos ¿ocurren de manera homogénea entre las 21 áreas geográficas o se concentran en áreas específicas?
+
+**Comando para descargar la base:**
+mkdir -p data/raw data/db
+curl -L "https://drive.google.com/file/d/1-HOZRkhqMI4HyxwUJRAjpoQwDnv1BTXR/view?usp=drive_link" -o data/raw/delitos_LA.csv
