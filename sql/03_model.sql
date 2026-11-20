@@ -4,13 +4,14 @@ CREATE SCHEMA IF NOT EXISTS model;
 
 CREATE OR REPLACE TABLE model.del_sexo AS
 SELECT
+     anio,
      sexo_vic,
      delito,
     COUNT(*) AS n_delitos
 FROM clean.delitos_LA
 WHERE sexo_vic IN ('F','M')
     AND anio BETWEEN 2020 AND 2023
-GROUP BY sexo_vic, delito;
+GROUP BY anio,sexo_vic, delito;
 
 
   -- Pregunta 2: ¿en qué áreas se concentran los delitos?
