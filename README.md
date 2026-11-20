@@ -25,4 +25,6 @@ Este conjunto de datos refleja incidentes de delitos en la ciudad de Los Ángele
 - `weapon_used_cd`: tipo de arma utilizada
 
 **Pregunta central del análisis:**
-Considerando el acumulado total del periodo para definir los 3 delitos más frecuentes en mujeres y en hombres, ¿cómo ha evolucionado su incidencia año con año y cuál es el tipo de arma más utilizada en cada uno?
+
+1. Considerando el acumulado total del periodo ¿cuáles son los 3 delitos más frecuentes, según el sexo de las víctimas? 
+2. Estos delitos derivados de la pregunta 1 ¿ocurren de manera homogénea entre las 21 áreas geográficas o se concentran en áreas específicas?
