@@ -16,15 +16,14 @@ Este conjunto de datos refleja incidentes de delitos en la ciudad de Los Ángele
 
 **Significado de las variables principales:** 
 
-- `date_occ`: fecha de ocurrencia del incidente
-- `area_name`: nombre de las 21 áreas geográficas o divisiones de patrulla
-- `crm_cd`: delito cometido
-- `MOCODES`: modus operandi
-- `vict_sex`: sexo de la víctima
-- `vict_age`: edad de la víctima
-- `weapon_used_cd`: tipo de arma utilizada
+- `DATE OCC`: fecha de ocurrencia del incidente
+- `AREA NAME`: nombre de las 21 áreas geográficas o divisiones de patrulla
+- `Crm Cd`: delito cometido
+- `Mocodes`: modus operandi
+- `Vict Sex`: sexo de la víctima
+- `Vict Age`: edad de la víctima
 
 **Pregunta central del análisis:**
 
-1. Considerando el acumulado total del periodo ¿cuáles son los 3 delitos más frecuentes, según el sexo de las víctimas? 
-2. Estos delitos derivados de la pregunta 1 ¿ocurren de manera homogénea entre las 21 áreas geográficas o se concentran en áreas específicas?
+1. ¿Cuáles son los 3 delitos más frecuentes en el acumulado 2020–2023, según el sexo de la víctima? 
+2. Los 3 delitos más frecuentes por sexo de la víctima, ¿ocurren de manera homogénea entre las 21 áreas geográficas o se concentran en áreas específicas?
