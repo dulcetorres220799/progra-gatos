@@ -14,4 +14,4 @@ SELECT
     CASE WHEN "Vict Age"::INTEGER BETWEEN 1 AND 99 THEN "Vict Age"::INTEGER END AS edad_vic
 
 FROM raw.delitos_LA
-WHERE EXTRACT(YEAR FROM strptime("DATE OCC", '%m/%d/%Y %I:%M:%S %p')) BETWEEN 2020 AND 2024;
+WHERE EXTRACT(YEAR FROM strptime("DATE OCC", '%m/%d/%Y %I:%M:%S %p')) BETWEEN 2020 AND 2023;
