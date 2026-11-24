@@ -52,7 +52,9 @@ Cada fila representa un incidente delictivo (crime incident).
 
 **Decisiones importantes de limpieza:**
 
-En la capa `clean` se crea la tabla `delitos_LA` solo con los delitos de 2020 a 2023 y con las columnas necesarias para el análisis, renombradas con minúsculas y sin espacios, y con el tipo de dato correcto. El texto de fecha y hora se convierte en una fecha completa, y a partir de ella se obtienen la hora, el día de la semana y el año. 
+En la capa `clean` se crea la tabla `delitos_LA` con todos los registros del archivo original (2020–2024; 1,004,894 filas) y solo con las columnas necesarias para el análisis, renombradas con minúsculas y sin espacios, y con el tipo de dato correcto. La fecha y la hora de ocurrencia, que vienen como texto en dos campos distintos, se unen en una sola variable de fecha y hora (`fecha_occ`); a partir de los campos originales se obtienen además la hora, el día de la semana y el año.
+
+El recorte del periodo de análisis a 2020–2023 no se aplica en `clean`, sino en la capa `model` (ver `sql/03_model.sql`), por las razones descritas en «Advertencias sobre la calidad de los datos». Así, `clean` conserva la serie completa y el perfilado puede mostrar la caída de registros en 2024 que justifica esa decisión.
 
 Los valores no válidos de sexo de la víctima (todo lo que no es F, M o X) y de edad (lo que queda fuera de 1 a 99) se dejan como vacíos.
 
@@ -72,50 +74,43 @@ Las columnas renombradas se muestran a continuación:
 
 Se reconocen dos observaciones:
 
-1. Al revisar el número de registros por año, se evidencia una caída significativa en el número de registros para el año 2024, especialmente a partir de marzo. Al revisar la documentación del archivo, detectamos que el LAPD transitó a un diferente esquema de registro de incidentes delictivos (UCR a NIBRS). No obstante, no hay aclaraciones sobre por qué unos incidentes sí fueron registrados y otros no. Por esta razón, decidimos acotar el análisis para los registros que tuvieran como año de ocurrencia entre 2020 y 2023.
+1. Al revisar el número de registros por año, se evidencia una caída significativa en el número de registros para el año 2024, especialmente a partir de marzo. Al revisar la documentación del archivo, detectamos que el LAPD transitó a un diferente esquema de registro de incidentes delictivos (UCR a NIBRS). No obstante, no hay aclaraciones sobre por qué unos incidentes sí fueron registrados y otros no. Por esta razón, decidimos acotar el análisis para los registros que tuvieran como año de ocurrencia entre 2020 y 2023. Este filtro se aplica en la capa `model`.
 
 2. Al trabajar únicamente con delitos determinados por el sexo de la víctima (F o M) es posible que se descarten delitos cuyo sexo de la víctima fue mal capturado o desconocido, así como delitos en donde no necesariamente se reporta el sexo de una víctima, como en el robo de vehículos.
+
+**Cómo instalar dependencias (uv sync):**
+
+Paso 1: Si no tienes uv, instálalo con `curl -LsSf https://astral.sh/uv/install.sh | sh`. Después cierra y vuelve a abrir la terminal, y verifica con `uv --version`.
+
+Paso 2: Clona el repositorio y ubícate en su raíz:
+
+`git clone https://github.com/dulcetorres220799/progra-gatos.git`
+
+`cd progra-gatos`
+
+Paso 3: Ejecuta `uv sync`. Este comando lee `pyproject.toml` y `uv.lock`, crea el ambiente virtual `.venv` e instala exactamente las mismas versiones de las librerías usadas en el proyecto (DuckDB, pandas, matplotlib, seaborn e ipykernel). No es necesario usar `uv init` ni `uv add`: el proyecto ya está configurado.
 
 **Cómo recuperar el CSV original usando CLI:**
 
 Paso 1: `mkdir -p data/raw data/db` para crear los directorios
 
-Paso 2: `curl -L "https://data.lacity.org/api/views/2nrs-mtv8/rows.csv?accessType=DOWNLOAD" -o data/raw/delitos_LA.csv` para descargar la base y guardarla en la capa `raw`
-
-**Cómo instalar dependencias (uv sync):**
-
-Paso 1: Instalar uv con  `curl -LsSf https://astral.sh/uv/install.sh | sh` 
-
-Paso 2: Clonar el repositorio y ubicarse en su raíz con los siguientes comandos:
-        
-	`git clone https://github.com/dulcetorres220799/progra-gatos.git`
-	`cd progra-gatos`
-
-Paso 3: Ejecutar `uv sync` . Este comando lee `pyproject.toml`y `uv.lock`, crea el ambiente virtual `.venv` instala las mismas versiones de las librerías usadas en el proyecto.
-
-Paso 4: Ejecutar `uv init --bare` para crear el propio ambiente virtual del proyecto 
-
-Paso 5: Ejecutar `uv python pin 3.12` para fijar la versión de Python que se usará
-
-Paso 6: Ejecutar los siguientes comandos para agregar las paqueterías necesarias y el kernel: 
-
-- `uv add duckdb`
-- `uv add pandas`
-- `uv add matplotlib`
-- `uv add ipykernel`
-- `uv add seaborn`
-
-Paso 7: Ejecutar `uv sync` para sincronizar dependencias. 
+Paso 2: `curl -L "https://data.lacity.org/api/views/2nrs-mtv8/rows.csv?accessType=DOWNLOAD" -o data/raw/delitos_LA.csv` para descargar la base y guardarla en `data/raw/`
 
 **Cómo construir DuckDB con los SQL, desde una base vacía:**
 
-Paso 1: Ejecutar `curl https://install.duckdb.org | bash` para instalar el modelo embebido duckdb
+Paso 1: Si no tienes la CLI de DuckDB, instálala con `curl https://install.duckdb.org | bash`.
 
-Paso 2: Ejecutar, desde la raíz del repositorio, y con el archivo CSV descargado en `data/raw/`los siguientes comandos para crear las tres capas:
+Paso 2: Desde la raíz del repositorio, y con el CSV ya descargado en `data/raw/`, ejecuta los tres scripts en orden:
+
+`rm -f data/db/delitos_LA.duckdb`
 
 `duckdb data/db/delitos_LA.duckdb -f sql/01_raw.sql`
+
 `duckdb data/db/delitos_LA.duckdb -f sql/02_clean.sql`
+
 `duckdb data/db/delitos_LA.duckdb -f sql/03_model.sql`
+
+El primer comando borra la base anterior, si existe, para construirla desde cero. Los scripts deben ejecutarse desde la raíz del repositorio, porque las rutas dentro de ellos son relativas a esa carpeta. Si algún notebook está abierto, reinicia o cierra su kernel antes de reconstruir la base: DuckDB no permite escribir en el archivo mientras otro proceso lo tiene abierto.
 
 **Cómo ejecutar ambos notebooks:**
 
@@ -161,7 +156,7 @@ Paso 2: Ejecutar `quarto render docs/reporte.qmd` para generar el reporte
 
 **Breve reflexión: ¿qué fue lo más difícil?, ¿qué hallazgo es más sólido y cuál más frágil?, ¿qué cambiarían con más tiempo?**
 
-Lo más difícil fue construir las capas `clean` y `model` en SQL, ya que si no estaban bien escritas no se podían ejecutar en la terminal ni continuar con los pasos siguientes. La capa `clean` implicó explorar la base para identificar qué era necesario limpiar y bajo qué criterios, además de tener claras las preguntas para saber qué variables conservar. Uno de los principales retos fue transformar la fecha y la hora, que venían como texto y en formatos distintos, para unirlas en una sola variable de fecha y obtener a partir de ella la hora, el día de la semana y el año. También fue necesario definir criterios para dejar como vacíos los valores no válidos de sexo de la víctima (distintos de F, M o X) y de edad (fuera del rango de 1 a 99), así como filtrar únicamente los delitos ocurridos entre 2020 y 2023. De igual forma, la capa `model` requirió tener bien definidas las preguntas para saber qué información se quería mostrar en las gráficas.
+Lo más difícil fue construir las capas `clean` y `model` en SQL, ya que si no estaban bien escritas no se podían ejecutar en la terminal ni continuar con los pasos siguientes. La capa `clean` implicó explorar la base para identificar qué era necesario limpiar y bajo qué criterios, además de tener claras las preguntas para saber qué variables conservar. Uno de los principales retos fue transformar la fecha y la hora, que venían como texto y en formatos distintos, para unirlas en una sola variable de fecha y obtener a partir de ella la hora, el día de la semana y el año. También fue necesario definir criterios para dejar como vacíos los valores no válidos de sexo de la víctima (distintos de F, M o X) y de edad (fuera del rango de 1 a 99), así como decidir en qué capa aplicar el recorte del periodo 2020–2023: lo dejamos en `model` para que `clean` conservara la serie completa y el perfilado pudiera mostrar la caída de registros en 2024. De igual forma, la capa `model` requirió tener bien definidas las preguntas para saber qué información se quería mostrar en las gráficas.
 
 El hallazgo más sólido es el de los delitos más frecuentes por sexo de la víctima, ya que se obtiene directamente del conteo de casos registrados, aunque con la limitación de considerar solo los registros con sexo bien clasificado como masculino o femenino. Aun así, muestra una diferencia clara entre hombres y mujeres en materia de incidencia delictiva. El más frágil es el de la concentración de delitos por área, porque se basa en cifras absolutas y no en tasas por habitantes, por lo que no permite comparar el riesgo entre áreas.
 
