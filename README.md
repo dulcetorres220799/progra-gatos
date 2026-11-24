@@ -141,9 +141,28 @@ Cada figura se guarda con un nombre distinto (`figura_01.png`, `figura_02.png`, 
 
 **Cómo renderizar docs/reporte.qmd:**
 
-Paso 1: Ejecutar `cd nombre_repositorio` para ubicarnos en el repositorio del proyecto
+Paso 1: Ejecutar `cd ~` para salir del repositorio y que el instalador de Quarto no se descargue dentro de él
 
-Paso 2: Ejecutar `quarto render docs/reporte.qmd` para generar el reporte
+Paso 2: Ejecutar los siguientes comandos para descargar e instalar la versión más reciente de Quarto (pide la contraseña de Ubuntu)
+
+```bash
+VERSION=$(curl -s https://api.github.com/repos/quarto-dev/quarto-cli/releases/latest | grep tag_name | cut -d '"' -f4 | sed 's/v//')
+wget https://github.com/quarto-dev/quarto-cli/releases/download/v${VERSION}/quarto-${VERSION}-linux-amd64.deb
+sudo dpkg -i quarto-${VERSION}-linux-amd64.deb
+rm quarto-${VERSION}-linux-amd64.deb
+```
+
+Paso 3: Ejecutar `quarto --version` para verificar la instalación
+
+Paso 4: Ejecutar `cd nombre_repositorio` para ubicarnos en el repositorio del proyecto
+
+Paso 5: Ejecutar `touch docs/reporte.qmd` para crear el archivo del reporte
+
+Paso 6: Ejecutar `nano docs/reporte.qmd` para escribir el contenido (guardar con `Ctrl+O` y `Enter`, salir con `Ctrl+X`)
+
+Paso 7: Ejecutar `quarto preview docs/reporte.qmd --port 13002` para ver el reporte en `http://localhost:13002/` (detener con `Ctrl+C`)
+
+Paso 8: Ejecutar `quarto render docs/reporte.qmd` para generar el reporte final en `docs/reporte.html`
 
 **Audiencia, preguntas e interpretaciones principales del reporte; rutas de las figuras publicadas:**
 
