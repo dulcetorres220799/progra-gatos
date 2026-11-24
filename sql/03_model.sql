@@ -7,8 +7,11 @@ CREATE SCHEMA IF NOT EXISTS model;
 -- incompletos (ver nb01). La capa clean conserva 2020–2024.
 -- ---------------------------------------------------------------------
 
--- Pregunta: ¿cuáles son los tres delitos más frecuentes en el acumulado
--- 2020–2023, según el sexo de la víctima?
+-- Preguntas 1 y 2: tres delitos más frecuentes por sexo de la víctima
+-- (acumulado 2020–2023) y su evolución por año.
+-- Una fila = una combinación sexo de la víctima × delito × año, con su
+-- número de registros. Para el acumulado (pregunta 1) se suman los años.
+-- Solo F y M: se excluyen X (sexo desconocido) y faltantes.
 
 CREATE OR REPLACE TABLE model.del_sexo AS
 SELECT
@@ -22,7 +25,7 @@ WHERE sexo_vic IN ('F', 'M')
 GROUP BY sexo_vic, delito, anio;
 
 -- --------------------------------------------------------------------
--- Pregunta: ¿en qué días de la semana y horas ocurre el principal
+-- Pregunta 3: ¿en qué días de la semana y horas ocurre el principal
 -- delito de cada sexo?
 -- Una fila = una combinación sexo × delito × día de la semana × hora,
 -- con su número de registros acumulados en 2020–2023.
@@ -43,9 +46,10 @@ WHERE sexo_vic IN ('F', 'M')
 GROUP BY sexo_vic, delito, diasem, hora_occ;
 
 -- -------------------------------------------------------------------
--- Pregunta: los 3 delitos más frecuentes por sexo de la víctima,
--- ¿ocurren de manera homogénea entre las 21 áreas geográficas o
--- se concentran en áreas específicas?
+-- Preguntas 4 y 5: áreas que concentran el 50 % de los delitos de cada
+-- sexo (sumando todos los delitos) y del principal delito de cada sexo.
+-- Una fila = una combinación sexo de la víctima × delito × área, con su
+-- número de registros acumulados en 2020–2023.
 -- ------------------------------------------------------------------
 
 CREATE OR REPLACE TABLE model.del_area AS
