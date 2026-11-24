@@ -18,7 +18,7 @@ https://data.lacity.org/api/views/2nrs-mtv8/rows.csv?accessType=DOWNLOAD
 
 **Condiciones de uso disponibles:**
 
-Si bien el registro pertenece al departamento de la policía de Los Angeles, el archivo se encuentra publicado por el gobierno de la ciudad mediante su portal de datos abiertos. Dentro de la página no hay una justificación de por qué se encuentra pública; sin embargo, dentro del ecosistema de datos abiertos, conocer la ocurrencia y ubicación de los delitos constituye un ejercicio de transparencia valioso para la ciudadanía, la academia y el sector empresarial.
+El conjunto de datos *Crime Data from 2020 to 2024* se publica en el portal de datos abiertos de la ciudad de Los Ángeles, con el LAPD como fuente (*attribution*: Los Angeles Police Department), bajo la licencia **Creative Commons 1.0 Universal (dedicación al dominio público, CC0)**: puede copiarse, modificarse y distribuirse sin necesidad de pedir permiso. Aun así, citamos la fuente como buena práctica. Dentro del ecosistema de datos abiertos, conocer la ocurrencia y ubicación de los delitos constituye un ejercicio de transparencia valioso para la ciudadanía, la academia y el sector empresarial.
 
 **Cobertura:**
 
@@ -26,9 +26,17 @@ La base registra los delitos denunciados o conocidos por el departamento de poli
 
 **Preguntas desarrolladas en el análisis de la base:**
 
-Pregunta 1: ¿Cuáles son los 3 delitos más frecuentes en el acumulado 2020–2023, según el sexo de la víctima?
+Pregunta 1: ¿Cuáles son los tres delitos más frecuentes en el acumulado 2020–2023, según el sexo de la víctima?
 
-Pregunta 2: Los 3 delitos más frecuentes por sexo de la víctima, ¿ocurren de manera homogénea entre las 21 áreas geográficas o se concentran en áreas específicas?
+Pregunta 2: ¿Cómo evolucionaron por año (2020–2023) los tres delitos más frecuentes de cada sexo?
+
+Pregunta 3: ¿En qué días de la semana y horas ocurre el principal delito de cada sexo?
+
+Pregunta 4: ¿Las áreas que concentran el 50 % de los delitos con víctima mujer son las mismas que para víctima hombre?
+
+Pregunta 5: ¿Qué áreas concentran el 50 % del principal delito de cada sexo, y cómo se comparan con el total de delitos?
+
+Las cinco preguntas usan el mismo universo: 683,121 registros de 2020–2023 con víctima registrada como mujer (F) u hombre (M), equivalentes al 77.9 % de los registros del periodo.
 
 **Principales columnas utilizadas (tal cual aparecen en la base original -capa raw-):**
 
@@ -36,7 +44,7 @@ Pregunta 2: Los 3 delitos más frecuentes por sexo de la víctima, ¿ocurren de 
 - `TIME OCC`: hora de ocurrencia del incidente
 - `AREA`: número correspondiente a cada una de las 21 áreas o divisiones de patrulla 
 - `AREA NAME`: nombre de las 21 áreas geográficas o divisiones de patrulla
-- `Crm Cd`: delito cometido
+- `Crm Cd Desc`: descripción del delito principal del incidente
 - `Vict Sex`: sexo de la víctima
 - `Vict Age`: edad de la víctima
 
@@ -46,9 +54,9 @@ Cada fila representa un incidente delictivo (crime incident).
 
 **Descripción de las capas:**
 
-- `raw`: Corresponde a datos de origen, sin transformaciones.
-- `clean`: Corresponde a datos estandarizados y validados, con base en las instrucciones descritas en el archivo sql/02_clean.sql
-- `model`: Corresponde a entidades, eventos u otras tablas desarrolladas para el análisis e interpretación de datos, con base en las instrucciones descritas en el archivo sql/03_model.sql
+- `raw`: Corresponde a datos de origen, sin transformaciones (1,004,894 filas).
+- `clean`: Corresponde a datos estandarizados y validados, con base en las instrucciones descritas en el archivo sql/02_clean.sql (1,004,894 filas; 2020–2024).
+- `model`: Corresponde a entidades, eventos u otras tablas desarrolladas para el análisis e interpretación de datos, con base en las instrucciones descritas en el archivo sql/03_model.sql. Contiene tres tablas agregadas (`del_sexo`, `del_dia_hora` y `del_area`) construidas sobre 683,121 registros de 2020–2023 con víctima mujer u hombre.
 
 **Decisiones importantes de limpieza:**
 
@@ -129,7 +137,7 @@ Después del EDA en `notebooks/nb02_preguntas_visualizaciones.ipynb`, las visual
 `fig.tight_layout()`
 `fig.savefig("../docs/imgs/figura_01.png", dpi=160, bbox_inches="tight")`
 
-Cada figura se guarda con un nombre distinto (`figura_01.png`, `figura_02.png`, etc.). Para regenerarlas, basta con volver a ejecutar completo el notebook
+Cada figura se guarda con un nombre distinto (`figura_01.png`, `figura_02.png`, etc.). Para regenerarlas, basta con volver a ejecutar completo el notebook: seleccionar "Restart" y después "Run All", guardar el notebook (`Ctrl + S`) y revisar las figuras antes de hacer `git add`.
 
 **Cómo renderizar docs/reporte.qmd:**
 
@@ -141,18 +149,33 @@ Paso 2: Ejecutar `quarto render docs/reporte.qmd` para generar el reporte
 
 **Audiencia:** Público general y estudiantes interesados en la incidencia delictiva en Los Ángeles.
 
-**Pregunta 1:** ¿Cuáles son los 3 delitos más frecuentes en el acumulado 2020–2023, según el sexo de la víctima?
+**Pregunta 1:** ¿Cuáles son los tres delitos más frecuentes en el acumulado 2020–2023, según el sexo de la víctima?
 
-**Hallazgo principal:** En las mujeres, el delito más frecuente es la agresión simple por parte de la pareja íntima; en los hombres, la agresión física simple. Esto sugiere que el principal delito contra las mujeres ocurre en un contexto de violencia de género, aunque los datos por sí solos no permiten comprobar sus causas.
+**Hallazgo principal:** La lesión física simple es común a ambos sexos, pero el resto de la composición difiere. Entre las mujeres, la lesión simple por parte de la pareja íntima, la lesión física simple y el robo de identidad están prácticamente empatados (entre 32,435 y 33,193 registros); entre los hombres, los tres principales son la lesión física simple, la lesión agravada con arma mortal y el robo al interior de vehículos. La violencia de pareja aparece solo entre los tres principales delitos de las mujeres, aunque los datos por sí solos no permiten establecer sus causas.
 
-**Pregunta 2:** Los 3 delitos más frecuentes por sexo de la víctima, ¿ocurren de manera homogénea entre las 21 áreas geográficas o se concentran en áreas específicas?
+**Pregunta 2:** ¿Cómo evolucionaron por año (2020–2023) los tres delitos más frecuentes de cada sexo?
 
-**Hallazgo principal:** Los delitos no se distribuyen de manera homogénea; para ambos sexos se concentran principalmente en 77th Street y Southeast, y en los hombres también destaca Central. Sin embargo, los datos son cifras absolutas y no tasas por habitantes, por lo que no se puede afirmar que un área sea más violenta que otra.
+**Hallazgo principal:** La mayoría de los delitos se mantuvo relativamente estable entre 2020 y 2023. La excepción es el robo de identidad con víctima mujer, que pasa de alrededor de 4,500 registros en 2020 a cerca de 14,000 en 2022 y vuelve a bajar en 2023; su lugar entre los tres principales delitos depende en buena medida de ese año.
+
+**Pregunta 3:** ¿En qué días de la semana y horas ocurre el principal delito de cada sexo?
+
+**Hallazgo principal:** La lesión simple por parte de la pareja íntima se concentra en las noches, sobre todo de fin de semana; la lesión física simple contra hombres se concentra en las tardes. La hora de ocurrencia presenta amontonamiento en las 12:00 y las 00:01, que no debe interpretarse como concentración real.
+
+**Pregunta 4:** ¿Las áreas que concentran el 50 % de los delitos con víctima mujer son las mismas que para víctima hombre?
+
+**Hallazgo principal:** 9 de 21 áreas reúnen al menos el 50 % de los delitos de cada sexo, una concentración moderada (con un reparto uniforme se necesitarían alrededor de 10.5). Las áreas coinciden en 6 de 9; Southwest, Southeast y Olympic aparecen solo para mujeres, y Topanga, West Valley y Wilshire solo para hombres.
+
+**Pregunta 5:** ¿Qué áreas concentran el 50 % del principal delito de cada sexo, y cómo se comparan con el total de delitos?
+
+**Hallazgo principal:** La violencia de pareja contra mujeres se concentra en el sur de la ciudad (77th Street, Southeast y Southwest) y requiere 8 áreas para alcanzar el 50 %; la lesión física simple contra hombres se concentra en Central y Hollywood. 77th Street y Newton son las únicas áreas presentes en todos los grupos de concentración. Los datos son cifras absolutas y no tasas por habitante, por lo que no permiten afirmar que un área sea más riesgosa que otra.
 
 **Rutas de las figuras publicadas:**
 
 - Pregunta 1: `docs/imgs/figura_01.png`
-- Pregunta 2: `docs/imgs/figura_02.png` 
+- Pregunta 2: `docs/imgs/figura_02.png`
+- Pregunta 3: `docs/imgs/figura_03.png`
+- Pregunta 4: `docs/imgs/figura_04.png`
+- Pregunta 5: `docs/imgs/figura_05.png`
 
 **Breve reflexión: ¿qué fue lo más difícil?, ¿qué hallazgo es más sólido y cuál más frágil?, ¿qué cambiarían con más tiempo?**
 
@@ -160,4 +183,4 @@ Lo más difícil fue construir las capas `clean` y `model` en SQL, ya que si no 
 
 El hallazgo más sólido es el de los delitos más frecuentes por sexo de la víctima, ya que se obtiene directamente del conteo de casos registrados, aunque con la limitación de considerar solo los registros con sexo bien clasificado como masculino o femenino. Aun así, muestra una diferencia clara entre hombres y mujeres en materia de incidencia delictiva. El más frágil es el de la concentración de delitos por área, porque se basa en cifras absolutas y no en tasas por habitantes, por lo que no permite comparar el riesgo entre áreas.
 
-Con más tiempo se incorporarían datos de población por área para calcular tasas por cada 100 mil habitantes y comparar las áreas de forma más justa. También se podría analizar la evolución de los delitos año con año para identificar tendencias.
+Con más tiempo se incorporarían datos de población por área para calcular tasas por cada 100 mil habitantes y comparar las áreas de forma más justa. También se podría analizar la concentración a una escala más fina, con las coordenadas de cada incidente; incorporar el tipo de lugar donde ocurrió el delito (variable `Premis Desc`) para poner a prueba las hipótesis sobre espacios residenciales y de actividad nocturna; e investigar el origen del pico de robo de identidad en 2022.
