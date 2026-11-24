@@ -84,11 +84,14 @@ Paso 2: `curl -L "https://data.lacity.org/api/views/2nrs-mtv8/rows.csv?accessTyp
 
 **Cómo instalar dependencias (uv sync):**
 
-Paso 1: Ejecutar `curl -LsSf https://astral.sh/uv/install.sh | sh` para instalar uv
+Paso 1: Instalar uv con  `curl -LsSf https://astral.sh/uv/install.sh | sh` 
 
-Paso 2: Cuando termine la instalación, cerrar y volver a abrir la terminal para verificar con `uv --version`
+Paso 2: Clonar el repositorio y ubicarse en su raíz con los siguientes comandos:
+        
+	`git clone https://github.com/dulcetorres220799/progra-gatos.git`
+	`cd progra-gatos`
 
-Paso 3: Ejecutar `cd nombre_repositorio` para ubicarnos en el repositorio del proyecto
+Paso 3: Ejecutar `uv sync` . Este comando lee `pyproject.toml`y `uv.lock`, crea el ambiente virtual `.venv` instala las mismas versiones de las librerías usadas en el proyecto.
 
 Paso 4: Ejecutar `uv init --bare` para crear el propio ambiente virtual del proyecto 
 
@@ -108,9 +111,9 @@ Paso 7: Ejecutar `uv sync` para sincronizar dependencias.
 
 Paso 1: Ejecutar `curl https://install.duckdb.org | bash` para instalar el modelo embebido duckdb
 
-Paso 2: Ejecutar los sigueintes comandos para crear las tres capas:
+Paso 2: Ejecutar, desde la raíz del repositorio, y con el archivo CSV descargado en `data/raw/`los siguientes comandos para crear las tres capas:
 
-`duckdb data/db/delitos_LA.duckdb -f sql/01_raw.sq`
+`duckdb data/db/delitos_LA.duckdb -f sql/01_raw.sql`
 `duckdb data/db/delitos_LA.duckdb -f sql/02_clean.sql`
 `duckdb data/db/delitos_LA.duckdb -f sql/03_model.sql`
 
