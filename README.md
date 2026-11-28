@@ -88,81 +88,116 @@ Se reconocen dos observaciones:
 
 **Cómo instalar dependencias (uv sync):**
 
-Paso 1: Si no tienes uv, instálalo con `curl -LsSf https://astral.sh/uv/install.sh | sh`. Después cierra y vuelve a abrir la terminal, y verifica con `uv --version`.
+Paso 1: Si no tienes uv, instálalo con: 
+
+```
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Después cierra y vuelve a abrir la terminal, y verifica con:
+
+```
+uv --version
+```
 
 Paso 2: Clona el repositorio y ubícate en su raíz:
 
-`git clone https://github.com/dulcetorres220799/progra-gatos.git`
+```
+git clone https://github.com/dulcetorres220799/progra-gatos.git
+cd progra-gatos
+```
 
-`cd progra-gatos`
+Paso 3: Ejecuta 
 
-Paso 3: Ejecuta `uv sync`. Este comando lee `pyproject.toml` y `uv.lock`, crea el ambiente virtual `.venv` e instala exactamente las mismas versiones de las librerías usadas en el proyecto (DuckDB, pandas, matplotlib, seaborn e ipykernel). No es necesario usar `uv init` ni `uv add`: el proyecto ya está configurado.
+```
+uv sync
+```
+
+Este comando lee `pyproject.toml` y `uv.lock`, crea el ambiente virtual `.venv` e instala exactamente las mismas versiones de las librerías usadas en el proyecto (DuckDB, pandas, matplotlib, seaborn e ipykernel). No es necesario usar `uv init` ni `uv add`: el proyecto ya está configurado.
 
 **Cómo recuperar el CSV original usando CLI:**
 
-Paso 1: `mkdir -p data/raw data/db` para crear los directorios
+Desde la raíz del repositorio, ejecuta:
 
-Paso 2: `curl -L "https://data.lacity.org/api/views/2nrs-mtv8/rows.csv?accessType=DOWNLOAD" -o data/raw/delitos_LA.csv` para descargar la base y guardarla en `data/raw/`
+```
+curl -L "https://data.lacity.org/api/views/2nrs-mtv8/rows.csv?accessType=DOWNLOAD" -o data/raw/delitos_LA.csv 
+```
 
 **Cómo construir DuckDB con los SQL, desde una base vacía:**
 
-Paso 1: Si no tienes la CLI de DuckDB, instálala con `curl https://install.duckdb.org | bash`.
+Paso 1: Si no tienes la CLI de DuckDB, instálala con 
 
-Paso 2: Desde la raíz del repositorio, y con el CSV ya descargado en `data/raw/`, ejecuta los tres scripts en orden:
+```
+curl https://install.duckdb.org | bash
+```
 
-`rm -f data/db/delitos_LA.duckdb`
+Paso 2: Desde la raíz del repositorio, y con el CSV ya descargado en `data/raw/`, ejecuta los scripts en orden:
 
-`duckdb data/db/delitos_LA.duckdb -f sql/01_raw.sql`
-
-`duckdb data/db/delitos_LA.duckdb -f sql/02_clean.sql`
-
-`duckdb data/db/delitos_LA.duckdb -f sql/03_model.sql`
+```
+rm -f data/db/delitos_LA.duckdb
+duckdb data/db/delitos_LA.duckdb -f sql/01_raw.sql
+duckdb data/db/delitos_LA.duckdb -f sql/02_clean.sql
+duckdb data/db/delitos_LA.duckdb -f sql/03_model.sql
+```
 
 El primer comando borra la base anterior, si existe, para construirla desde cero. Los scripts deben ejecutarse desde la raíz del repositorio, porque las rutas dentro de ellos son relativas a esa carpeta. Si algún notebook está abierto, reinicia o cierra su kernel antes de reconstruir la base: DuckDB no permite escribir en el archivo mientras otro proceso lo tiene abierto.
 
 **Cómo ejecutar ambos notebooks:**
 
-Paso 1: Ejecutar `code .` desde la raíz del repositorio para abrir el proyecto en VS
+Paso 1: Abrir VS
 
-Paso 2: Abrir `notebooks/nb01_estructura_perfilado.ipynb` y seleccionar el kernel `.venv` en "Select Kernel" para usar el ambiente del proyecto
+```
+code .
+```
 
-Paso 3: Seleccionar "Restart" y después "Run All" para ejecutar el notebook de principio a fin
+Paso 2: Ubicar la carpeta "notebooks", abrir cada notebook, seleccionar el kernel `.venv`, seleccionar "Restart" y después "Run All" 
 
-Paso 4: Abrir `notebooks/nb02_preguntas_visualizaciones.ipynb` y repetir los pasos 2 y 3 para ejecutar el análisis y generar las figuras en `docs/imgs/`
+```
+notebooks/nb01_estructura_perfilado.ipynb
+notebooks/nb02_preguntas_visualizaciones.ipynb
+```
 
-**Cómo regenerar las figuras:** 
+Nota: 
 
-Después del EDA en `notebooks/nb02_preguntas_visualizaciones.ipynb`, las visualizaciones generadas se guardan en `docs/imgs/` con el comando:
+Las figuras generadas en el EDA se guardan en automáticamente en `docs/imgs/` con `fig.tight_layout()` y `fig.savefig("../docs/imgs/figura_01.png", dpi=160, bbox_inches="tight")`
 
-`fig.tight_layout()`
-`fig.savefig("../docs/imgs/figura_01.png", dpi=160, bbox_inches="tight")`
+Cada figura se guarda con un nombre distinto (`figura_01.png`, `figura_02.png`, etc.). Para regenerarlas, basta con volver a ejecutar completo el notebook.
 
-Cada figura se guarda con un nombre distinto (`figura_01.png`, `figura_02.png`, etc.). Para regenerarlas, basta con volver a ejecutar completo el notebook: seleccionar "Restart" y después "Run All", guardar el notebook (`Ctrl + S`) y revisar las figuras antes de hacer `git add`.
 
 **Cómo renderizar docs/reporte.qmd:**
 
-Paso 1: Ejecutar `cd ~` para salir del repositorio y que el instalador de Quarto no se descargue dentro de él
+Paso 1: Si no tienes quarto, sal del repositorio con: 
 
-Paso 2: Ejecutar los siguientes comandos para descargar e instalar la versión más reciente de Quarto (pide la contraseña de Ubuntu)
+```
+cd ~
+``` 
 
-```bash
+Paso 2: Ejecuta los siguientes comandos para instalar la versión más reciente de Quarto (pide la contraseña de Ubuntu)
+
+```
 VERSION=$(curl -s https://api.github.com/repos/quarto-dev/quarto-cli/releases/latest | grep tag_name | cut -d '"' -f4 | sed 's/v//')
 wget https://github.com/quarto-dev/quarto-cli/releases/download/v${VERSION}/quarto-${VERSION}-linux-amd64.deb
 sudo dpkg -i quarto-${VERSION}-linux-amd64.deb
 rm quarto-${VERSION}-linux-amd64.deb
 ```
 
-Paso 3: Ejecutar `quarto --version` para verificar la instalación
+Paso 3: Verifica la instalación
 
-Paso 4: Ejecutar `cd nombre_repositorio` para ubicarnos en el repositorio del proyecto
+```
+quarto --version
+```
 
-Paso 5: Ejecutar `touch docs/reporte.qmd` para crear el archivo del reporte
+Paso 4: Entra de nuevo al repositorio
 
-Paso 6: Ejecutar `nano docs/reporte.qmd` para escribir el contenido (guardar con `Ctrl+O` y `Enter`, salir con `Ctrl+X`)
+```
+cd progra-gatos
+```
 
-Paso 7: Ejecutar `quarto preview docs/reporte.qmd --port 13002` para ver el reporte en `http://localhost:13002/` (detener con `Ctrl+C`)
+Paso 5: Renderiza el reporte para generar el html
 
-Paso 8: Ejecutar `quarto render docs/reporte.qmd` para generar el reporte final en `docs/reporte.html`
+```
+quarto render docs/reporte.qmd
+```
 
 **Audiencia, preguntas e interpretaciones principales del reporte; rutas de las figuras publicadas:**
 
