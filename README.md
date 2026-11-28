@@ -88,19 +88,19 @@ Se reconocen dos observaciones:
 
 **Cómo instalar dependencias (uv sync):**
 
-Paso 1: Si no tienes uv, instálalo con: 
+Paso 1: Si no tienes uv, instálalo 
 
 ```
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-Después cierra y vuelve a abrir la terminal, y verifica con:
+Después cierra y vuelve a abrir la terminal, y verifica con
 
 ```
 uv --version
 ```
 
-Paso 2: Clona el repositorio y ubícate en su raíz:
+Paso 2: Clona el repositorio y ubícate en su raíz
 
 ```
 git clone https://github.com/dulcetorres220799/progra-gatos.git
@@ -113,11 +113,11 @@ Paso 3: Ejecuta
 uv sync
 ```
 
-Este comando lee `pyproject.toml` y `uv.lock`, crea el ambiente virtual `.venv` e instala exactamente las mismas versiones de las librerías usadas en el proyecto (DuckDB, pandas, matplotlib, seaborn e ipykernel). No es necesario usar `uv init` ni `uv add`: el proyecto ya está configurado.
+Este último comando lee `pyproject.toml` y `uv.lock`, crea el ambiente virtual `.venv` e instala exactamente las mismas versiones de las librerías usadas en el proyecto (DuckDB, pandas, matplotlib, seaborn e ipykernel). No es necesario usar `uv init` ni `uv add`: el proyecto ya está configurado.
 
 **Cómo recuperar el CSV original usando CLI:**
 
-Desde la raíz del repositorio, ejecuta:
+Desde la raíz del repositorio, ejecuta
 
 ```
 curl -L "https://data.lacity.org/api/views/2nrs-mtv8/rows.csv?accessType=DOWNLOAD" -o data/raw/delitos_LA.csv 
@@ -125,13 +125,13 @@ curl -L "https://data.lacity.org/api/views/2nrs-mtv8/rows.csv?accessType=DOWNLOA
 
 **Cómo construir DuckDB con los SQL, desde una base vacía:**
 
-Paso 1: Si no tienes la CLI de DuckDB, instálala con 
+Paso 1: Si no tienes la CLI de DuckDB, instálala
 
 ```
 curl https://install.duckdb.org | bash
 ```
 
-Paso 2: Desde la raíz del repositorio, y con el CSV ya descargado en `data/raw/`, ejecuta los scripts en orden:
+Paso 2: Desde la raíz del repositorio, y con el CSV ya descargado en `data/raw/`, ejecuta los scripts en orden
 
 ```
 rm -f data/db/delitos_LA.duckdb
@@ -157,16 +157,11 @@ notebooks/nb01_estructura_perfilado.ipynb
 notebooks/nb02_preguntas_visualizaciones.ipynb
 ```
 
-Nota: 
-
-Las figuras generadas en el EDA se guardan en automáticamente en `docs/imgs/` con `fig.tight_layout()` y `fig.savefig("../docs/imgs/figura_01.png", dpi=160, bbox_inches="tight")`
-
-Cada figura se guarda con un nombre distinto (`figura_01.png`, `figura_02.png`, etc.). Para regenerarlas, basta con volver a ejecutar completo el notebook.
-
+Nota: Las figuras generadas en el EDA se guardan en automáticamente en `docs/imgs/` con `fig.tight_layout()` y `fig.savefig("../docs/imgs/figura_01.png", dpi=160, bbox_inches="tight")`. Cada figura se guarda con un nombre distinto (`figura_01.png`, `figura_02.png`, etc.). Para regenerarlas, basta con volver a ejecutar completo el notebook.
 
 **Cómo renderizar docs/reporte.qmd:**
 
-Paso 1: Si no tienes quarto, sal del repositorio con: 
+Paso 1: Si no tienes quarto, sal del repositorio con
 
 ```
 cd ~
